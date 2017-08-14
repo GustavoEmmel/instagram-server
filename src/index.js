@@ -1,12 +1,19 @@
 
 import app from './app';
-import {http} from '../config';
+import database from './database';
+import {db, http} from '../config';
 
-const server = app.listen(http.port, http.host, () => {
-  console.log(`Server listening on http://${http.host}:${http.port}`);
+database.connect(db.URL, { useMongoClient: true }).then(() => {
+  console.log(`Database connected.`);
+  app.emit('database:started');
 });
 
-process.on('uncaughtException', err => console.log('Uncaught exception', err));
-process.on('unhandledRejection', err => console.log('Unhandled rejection', err));
+app.listen(http.PORT, http.HOST, () => {
+  console.log(`Server listening on http://${http.HOST}:${http.PORT}`);
+  app.emit('app:started');
+});
 
-export default server;
+process.on('uncaughtException', err => console.log('Uncaught exception', err.message));
+process.on('unhandledRejection', err => console.log('Unhandled rejection', err.message));
+
+export default app;

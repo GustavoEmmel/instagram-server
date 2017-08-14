@@ -2,6 +2,8 @@ import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 
+import AuthRouter from './app/routers/Auth';
+
 const app = express();
 
 app.use(cors());
@@ -13,6 +15,8 @@ app.get('/', (req, res) => {
     message: 'Hello world'
   });
 });
+
+AuthRouter(app);
 
 app.use((req, res) => {
   res.status(404).json({

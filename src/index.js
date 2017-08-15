@@ -16,4 +16,4 @@ app.listen(http.PORT, http.HOST, () => {
 process.on('uncaughtException', err => console.log('Uncaught exception', err.message));
 process.on('unhandledRejection', err => console.log('Unhandled rejection', err.message));
 
-export default app;
+export {app, database};

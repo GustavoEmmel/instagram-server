@@ -1,13 +1,11 @@
 import chai, {expect} from 'chai';
 
-import UserModel from '../src/app/models/User';
+import User from '../src/app/models/User';
 
 export default (server) => {
 
   describe('Auth', () => {
-
-  	var User = UserModel(server);
-
+    
   	before(() => {
   		return User.findOneAndRemove({_id: 'test'});
   	});

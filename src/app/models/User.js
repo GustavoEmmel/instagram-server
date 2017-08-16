@@ -1,8 +1,5 @@
 
-import mongoose from 'mongoose';
-
-var Schema = mongoose.Schema;
-var ObjectId = Schema.Types.ObjectId;
+import mongoose, {Schema} from 'mongoose';
 
 var UserSchema = new Schema({
 	_id: {
@@ -31,6 +28,4 @@ UserSchema.options.toJSON.transform = function (doc, ret, options) {
 	delete ret.password;
 };
 
-export default (app) => {
-	return mongoose.model('User', UserSchema);
-};
+export default mongoose.model('User', UserSchema);

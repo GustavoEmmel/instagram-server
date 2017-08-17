@@ -3,6 +3,7 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 
 import authRouter from './app/routers/auth';
+import postRouter from './app/routers/post';
 
 const app = express();
 
@@ -17,6 +18,7 @@ app.get('/', (req, res) => {
 });
 
 authRouter(app);
+postRouter(app);
 
 app.use((req, res) => {
   res.status(404).json({

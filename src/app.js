@@ -4,6 +4,7 @@ import bodyParser from 'body-parser';
 
 import authRouter from './app/routers/auth';
 import postRouter from './app/routers/post';
+import fileRouter from './app/routers/file';
 
 const app = express();
 
@@ -19,6 +20,7 @@ app.get('/', (req, res) => {
 
 authRouter(app);
 postRouter(app);
+fileRouter(app);
 
 app.use((req, res) => {
   res.status(404).json({

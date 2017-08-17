@@ -1,3 +1,4 @@
+import NotFound from '../exceptions/NotFound';
 
 class Repository {
 
@@ -16,6 +17,15 @@ class Repository {
 
   findOne(where) {
     return this.Model.findOne(where);
+  }
+
+  findOneOrFail(where) {
+    return this.findOne(where).then(model => {
+      if (!model) {
+        throw new NotFound('Model does not exists.');
+      }
+      return model;
+    });
   }
 
   update(where, data) {

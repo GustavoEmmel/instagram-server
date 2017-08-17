@@ -2,7 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 
-import AuthRouter from './app/routers/Auth';
+import authRouter from './app/routers/auth';
 
 const app = express();
 
@@ -16,7 +16,7 @@ app.get('/', (req, res) => {
   });
 });
 
-AuthRouter(app);
+authRouter(app);
 
 app.use((req, res) => {
   res.status(404).json({

@@ -1,4 +1,3 @@
-
 import mongoose, {Schema} from 'mongoose';
 
 var UserSchema = new Schema({

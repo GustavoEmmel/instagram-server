@@ -1,7 +1,6 @@
-import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 
-import {auth} from '../../../../config';
+import {sign} from '../../../helpers/signature';
 import User from '../../models/User';
 
 export default async (req, res) => {
@@ -10,7 +9,7 @@ export default async (req, res) => {
   if (user) {
     if (bcrypt.compareSync(password, user.password)) {
       var {name, email} = user;
-      var token = jwt.sign({name, email}, auth.LOGGED_IN_SALT);
+      var token = sign({name, email});
       res.json({token, user});
     } else {
       res.status(401).json({message: 'Authentication failed: wrong password.'});

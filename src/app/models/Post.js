@@ -3,11 +3,13 @@ import mongoose, {Schema} from 'mongoose';
 var PostSchema = new Schema({
 	user: {
 		type: String,
-		ref: 'User'
+		ref: 'User',
+		required: true
 	},
 	image: {
 		type: Schema.Types.ObjectId,
-		ref: 'File'
+		ref: 'File',
+		required: true
 	},
 	message: {
 		type: String,

@@ -1,26 +1,38 @@
 import chai, {expect} from 'chai';
 
+import {sign} from '../src/helpers/signature';
 import Post from '../src/app/models/Post';
+import User from '../src/app/models/User';
+import File from '../src/app/models/File';
 
 export default (server) => {
 
   describe('Post', () => {
 
     var body = {
-      user: 'matheuslbarros',
       message: 'minha imagem bonitinha',
     };
 
-    /*
-  	before(() => {
-  		return Post.findOneAndRemove({message: body.message});
+    var authorization = null;
+    
+    before(() => {
+      return User.findOne({}).then((user) => {
+        const {name, email} = user;
+        authorization = 'JWT ' + sign({name, email});
+      });
+    });
+    
+    before(() => {
+      return File.findOne({}).then((file) => {
+        body.image = file._id;
+      });
   	});
-    */
-   
+    
   	describe('GET /api/post', () => {
   		it('it should get posts', (done) => {
   			chai.request(server)
-  				.get('/api/post')
+          .get('/api/post')
+          .set('Authorization', authorization)
   				.end((err, res) => {
   					expect(err, 'No error').to.be.null;
   					res.should.have.status(200);
@@ -34,6 +46,7 @@ export default (server) => {
       it('it should create a post', (done) => {
         chai.request(server)
           .post('/api/post')
+          .set('Authorization', authorization)
           .send(body)
           .end((err, res) => {
             expect(err, 'No error').to.be.null;
@@ -50,7 +63,8 @@ export default (server) => {
     describe('GET /api/post/:id', () => {
   		it('it should get one post', (done) => {
   			chai.request(server)
-  				.get('/api/post/' + body._id)
+          .get('/api/post/' + body._id)
+          .set('Authorization', authorization)
   				.end((err, res) => {
   					expect(err, 'No error').to.be.null;
   					res.should.have.status(200);
@@ -66,6 +80,7 @@ export default (server) => {
       it('it should update a put', (done) => {
         chai.request(server)
           .put('/api/post/' + body._id)
+          .set('Authorization', authorization)
           .send(body)
           .end((err, res) => {
             expect(err, 'No error').to.be.null;
@@ -81,6 +96,7 @@ export default (server) => {
       it('it should delete a post', (done) => {
         chai.request(server)
           .delete('/api/post/' + body._id)
+          .set('Authorization', authorization)
           .end((err, res) => {
             expect(err, 'No error').to.be.null;
             res.should.have.status(204);

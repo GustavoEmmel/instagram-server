@@ -1,6 +1,8 @@
 import chai, {expect} from 'chai';
 
+import {sign} from '../src/helpers/signature';
 import File from '../src/app/models/File';
+import User from '../src/app/models/User';
 
 export default (server) => {
 
@@ -10,6 +12,15 @@ export default (server) => {
       originalname: 'chaves.jpg',
     };
 
+    var authorization = null;
+
+    before(() => {
+      return User.findOne({}).then((user) => {
+        const {name, email} = user;
+        authorization = 'JWT ' + sign({name, email});
+      });
+    });
+
   	before(() => {
   		return File.remove({originalname: body.originalname});
   	});
@@ -17,7 +28,8 @@ export default (server) => {
   	describe('GET /api/file', () => {
   		it('it should get files', (done) => {
   			chai.request(server)
-  				.get('/api/file')
+          .get('/api/file')
+          .set('Authorization', authorization)
   				.end((err, res) => {
   					expect(err, 'No error').to.be.null;
   					res.should.have.status(200);
@@ -31,6 +43,7 @@ export default (server) => {
       it('it should create a file', (done) => {
         chai.request(server)
           .post('/api/file')
+          .set('Authorization', authorization)
           .attach('file', './uploads/' + body.originalname)
           .end((err, res) => {
             expect(err, 'No error').to.be.null;
@@ -48,6 +61,7 @@ export default (server) => {
       it('it should get a file', (done) => {
         chai.request(server)
           .get('/api/file/' + body._id)
+          .set('Authorization', authorization)
           .end((err, res) => {
             expect(err, 'No error').to.be.null;
             res.should.have.status(200);
@@ -63,6 +77,7 @@ export default (server) => {
       it('it should delete a file', (done) => {
         chai.request(server)
           .delete('/api/file/' + body._id)
+          .set('Authorization', authorization)
           .end((err, res) => {
             expect(err, 'No error').to.be.null;
             res.should.have.status(204);
@@ -75,6 +90,7 @@ export default (server) => {
       it('it should throw not found', (done) => {
         chai.request(server)
           .delete('/api/file/5995fd02cf447a4d1c21e1ba')
+          .set('Authorization', authorization)
           .end((err, res) => {
             expect(err, 'Not found error').to.be.an('error');
             res.should.have.status(404);

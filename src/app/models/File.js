@@ -25,6 +25,11 @@ var FileSchema = new Schema({
     type: String,
     required: true
   },
+  user: {
+		type: String,
+		ref: 'User',
+		required: true
+	},
   createdAt: {
     type: Date,
     default: Date.now

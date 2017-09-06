@@ -1,8 +1,15 @@
 import Repository from '../../db/Repository';
 import File from '../../models/File';
+import Unauthorized from '../../exceptions/Unauthorized';
 
 export default (req, res) => {
   if (req.file) {
+    if (!req.user) {
+      throw new Unauthorized('User not authenticated');
+    }
+
+    req.file.user = req.user.name;
+
     var repository = new Repository(File);
     repository
       .create(req.file)

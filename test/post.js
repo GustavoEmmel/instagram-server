@@ -1,6 +1,6 @@
-import chai, {expect} from 'chai';
+import chai, { expect } from 'chai';
 
-import {sign} from '../src/helpers/signature';
+import { sign } from '../src/helpers/signature';
 import Post from '../src/app/models/Post';
 import User from '../src/app/models/User';
 import File from '../src/app/models/File';
@@ -14,33 +14,33 @@ export default (server) => {
     };
 
     var authorization = null;
-    
+
     before(() => {
       return User.findOne({}).then((user) => {
-        const {name, email} = user;
-        authorization = 'JWT ' + sign({name, email});
+        const { name, email } = user;
+        authorization = 'JWT ' + sign({ name, email });
       });
     });
-    
+
     before(() => {
       return File.findOne({}).then((file) => {
         body.image = file._id;
       });
-  	});
-    
-  	describe('GET /api/post', () => {
-  		it('it should get posts', (done) => {
-  			chai.request(server)
+    });
+
+    describe('GET /api/post', () => {
+      it('it should get posts', (done) => {
+        chai.request(server)
           .get('/api/post')
           .set('Authorization', authorization)
-  				.end((err, res) => {
-  					expect(err, 'No error').to.be.null;
-  					res.should.have.status(200);
-  					res.body.should.be.a('array');
-  					done();
-  				});
-  		});
-  	});
+          .end((err, res) => {
+            expect(err, 'No error').to.be.null;
+            res.should.have.status(200);
+            res.body.should.be.a('array');
+            done();
+          });
+      });
+    });
 
     describe('POST /api/post', () => {
       it('it should create a post', (done) => {
@@ -61,20 +61,20 @@ export default (server) => {
     });
 
     describe('GET /api/post/:id', () => {
-  		it('it should get one post', (done) => {
-  			chai.request(server)
+      it('it should get one post', (done) => {
+        chai.request(server)
           .get('/api/post/' + body._id)
           .set('Authorization', authorization)
-  				.end((err, res) => {
-  					expect(err, 'No error').to.be.null;
-  					res.should.have.status(200);
-  					res.body.should.be.a('object');
+          .end((err, res) => {
+            expect(err, 'No error').to.be.null;
+            res.should.have.status(200);
+            res.body.should.be.a('object');
             res.body.user.should.be.a('string');
             res.body.message.should.be.a('string');
-  					done();
-  				});
-  		});
-  	});
+            done();
+          });
+      });
+    });
 
     describe('PUT /api/post/:id', () => {
       it('it should update a put', (done) => {

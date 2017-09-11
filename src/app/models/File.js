@@ -1,4 +1,4 @@
-import mongoose, {Schema} from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
 
 var FileSchema = new Schema({
   originalname: {
@@ -26,10 +26,10 @@ var FileSchema = new Schema({
     required: true
   },
   user: {
-		type: String,
-		ref: 'User',
-		required: true
-	},
+    type: String,
+    ref: 'User',
+    required: true
+  },
   createdAt: {
     type: Date,
     default: Date.now

@@ -1,6 +1,6 @@
-import chai, {expect} from 'chai';
+import chai, { expect } from 'chai';
 
-import {sign} from '../src/helpers/signature';
+import { sign } from '../src/helpers/signature';
 import File from '../src/app/models/File';
 import User from '../src/app/models/User';
 
@@ -16,28 +16,28 @@ export default (server) => {
 
     before(() => {
       return User.findOne({}).then((user) => {
-        const {name, email} = user;
-        authorization = 'JWT ' + sign({name, email});
+        const { name, email } = user;
+        authorization = 'JWT ' + sign({ name, email });
       });
     });
 
-  	before(() => {
-  		return File.remove({originalname: body.originalname});
-  	});
+    before(() => {
+      return File.remove({ originalname: body.originalname });
+    });
 
-  	describe('GET /api/file', () => {
-  		it('it should get files', (done) => {
-  			chai.request(server)
+    describe('GET /api/file', () => {
+      it('it should get files', (done) => {
+        chai.request(server)
           .get('/api/file')
           .set('Authorization', authorization)
-  				.end((err, res) => {
-  					expect(err, 'No error').to.be.null;
-  					res.should.have.status(200);
-  					res.body.should.be.a('array');
-  					done();
-  				});
-  		});
-  	});
+          .end((err, res) => {
+            expect(err, 'No error').to.be.null;
+            res.should.have.status(200);
+            res.body.should.be.a('array');
+            done();
+          });
+      });
+    });
 
     describe('POST /api/file', () => {
       it('it should create a file', (done) => {
